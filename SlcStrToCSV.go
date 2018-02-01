@@ -1,4 +1,4 @@
-package SlcStrToCSV
+package SlcStrtToCSV
 
 import (
 	"bytes"
@@ -22,7 +22,7 @@ func GetCSV(data []interface{}) (*bytes.Buffer, string) {
 			}
 		}
 		if err := writer.Write(titleSlice); err != nil {
-			return &bytes.Buffer{}, "SlcStrToCSV error: " + err.Error()
+			return &bytes.Buffer{}, "SlcStrtToCSV error: " + err.Error()
 		}
 		for _, value := range data {
 			val := reflect.Indirect(reflect.ValueOf(value))
@@ -35,11 +35,11 @@ func GetCSV(data []interface{}) (*bytes.Buffer, string) {
 				}
 			}
 			if err := writer.Write(record); err != nil {
-				return &bytes.Buffer{}, "SlcStrToCSV error: " + err.Error()
+				return &bytes.Buffer{}, "SlcStrtToCSV error: " + err.Error()
 			}
 		}
 		writer.Flush()
 		return b, ""
 	}
-	return &bytes.Buffer{}, "SlcStrToCSV error: slice is empty."
+	return &bytes.Buffer{}, "SlcStrtToCSV error: slice is empty."
 }
