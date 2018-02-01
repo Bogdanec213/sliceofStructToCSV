@@ -8,5 +8,6 @@ All values are written as strings. For this purpose I used package "github.com/s
 ## Usage
 
 Just use this:
-
+```
 sliceOfStructToCSV.GetCSV(yourSlice []interface{}) *bytes.Buffer
+```
