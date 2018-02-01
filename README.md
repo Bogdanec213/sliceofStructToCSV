@@ -13,6 +13,13 @@ go get github.com/metalCodeSolid/sliceofStructToCSV
 
 ## Usage
 
+Your struct:
+```
+Foo struct{
+...
+Field type `title:"fieldTitle"` // title is optional
+}
+```
 Just use this:
 ```
 SlcStrToCSV.GetCSV(yourSlice []interface{}) *bytes.Buffer
