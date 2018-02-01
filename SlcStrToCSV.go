@@ -1,4 +1,4 @@
-package sliceofStructToCSV
+package SlcStrToCSV
 
 import (
 	"bytes"
