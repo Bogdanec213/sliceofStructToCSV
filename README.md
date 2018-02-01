@@ -1,1 +1,2 @@
-# sliceofStructToCSV
+sliceofStructToCSV
+ is very simple lib to wrtie CSV files from slice of structs without setting a type of struct. It uses reflect package and getting names of fields and write it to the title of CSV file, values of fields written to body. Also you can add to each field tag "title" to replace title of csv to these tags. The only thing you should do is to append all structs to the slice of interface. Maybe in future I'll figure out how to do it simpler.
