@@ -5,6 +5,12 @@ It uses reflect package, gets names of struct's fields and write them to the tit
 
 All values are written as strings. For this purpose I used package "github.com/spf13/cast".
 
+## Instal link
+
+```
+go get github.com/metalCodeSolid/sliceofStructToCSV
+```
+
 ## Usage
 
 Just use this:
