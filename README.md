@@ -22,5 +22,5 @@ Field type `title:"fieldTitle"` // title is optional
 ```
 Just use this:
 ```
-SlcStrToCSV.GetCSV(yourSlice []interface{}) *bytes.Buffer
+SlcStrToCSV.GetCSV(yourSlice []interface{}) (*bytes.Buffer, string) // string is an error, if string is nill -> OK
 ```
