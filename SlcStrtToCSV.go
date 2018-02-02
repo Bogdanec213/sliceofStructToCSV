@@ -8,8 +8,18 @@ import (
 	"time"
 )
 
-func GetCSV(data []interface{}) (*bytes.Buffer, string) {
-	if len(data) > 0 {
+func GetCSV(sliceOfTruct interface{}) (*bytes.Buffer, string) {
+	data := reflect.ValueOf(sliceOfTruct)
+	if data.Kind() != reflect.Slice {
+		return &bytes.Buffer{}, "sliceofStructToCSV error: given a non-slice type"
+	}
+
+	sliceOfInterface := make([]interface{}, data.Len())
+
+	for i := 0; i < data.Len(); i++ {
+		sliceOfInterface[i] = data.Index(i).Interface()
+	}
+	if len(sliceOfInterface) > 0 {
 		b := &bytes.Buffer{}
 		writer := csv.NewWriter(b)
 		titleSlice := []string{}
@@ -24,7 +34,7 @@ func GetCSV(data []interface{}) (*bytes.Buffer, string) {
 		if err := writer.Write(titleSlice); err != nil {
 			return &bytes.Buffer{}, "SlcStrtToCSV error: " + err.Error()
 		}
-		for _, value := range data {
+		for _, value := range sliceOfInterface {
 			val := reflect.Indirect(reflect.ValueOf(value))
 			record := []string{}
 			for i := 0; i < val.NumField(); i++ {
