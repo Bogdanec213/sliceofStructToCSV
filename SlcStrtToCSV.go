@@ -25,10 +25,12 @@ func GetCSV(sliceOfTruct interface{}) (*bytes.Buffer, string) {
 		titleSlice := []string{}
 		val := reflect.Indirect(reflect.ValueOf(sliceOfInterface[0]))
 		for i := 0; i < val.NumField(); i++ {
-			if val.Type().Field(i).Tag.Get("title") == "" {
-				titleSlice = append(titleSlice, val.Type().Field(i).Name)
-			} else {
+			if val.Type().Field(i).Tag.Get("title") != "-" {
+				if val.Type().Field(i).Tag.Get("title") == "" {
+					titleSlice = append(titleSlice, val.Type().Field(i).Name)
+				} else {
 				titleSlice = append(titleSlice, val.Type().Field(i).Tag.Get("title"))
+				}
 			}
 		}
 		if err := writer.Write(titleSlice); err != nil {
