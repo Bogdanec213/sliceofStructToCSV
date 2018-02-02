@@ -6,12 +6,14 @@ import (
 	"github.com/spf13/cast"
 	"reflect"
 	"time"
+	"errors"
 )
 
-func GetCSV(sliceOfTruct interface{}) (*bytes.Buffer, string) {
+
+func GetCSV(sliceOfTruct interface{}) (*bytes.Buffer, error) {
 	data := reflect.ValueOf(sliceOfTruct)
 	if data.Kind() != reflect.Slice {
-		return &bytes.Buffer{}, "sliceofStructToCSV error: given a non-slice type"
+		return &bytes.Buffer{}, errors.New("sliceofStructToCSV error: given a non-slice type")
 	}
 
 	sliceOfInterface := make([]interface{}, data.Len())
@@ -23,21 +25,23 @@ func GetCSV(sliceOfTruct interface{}) (*bytes.Buffer, string) {
 		b := &bytes.Buffer{}
 		writer := csv.NewWriter(b)
 		titleSlice := []string{}
+		fieldNameSlice:= []string{}
 		val := reflect.Indirect(reflect.ValueOf(sliceOfInterface[0]))
 		skip := map[int]bool{}
 		for i := 0; i < val.NumField(); i++ {
-			if val.Type().Field(i).Tag.Get("title") != "-" {
-				if val.Type().Field(i).Tag.Get("title") == "" {
+			fieldNameSlice= append(fieldNameSlice, val.Type().Field(i).Name)
+			if fieldNameSlice[i] != "-" {
+				if fieldNameSlice[i] == "" {
 					titleSlice = append(titleSlice, val.Type().Field(i).Name)
 				} else {
-				titleSlice = append(titleSlice, val.Type().Field(i).Tag.Get("title"))
+				titleSlice = append(titleSlice, fieldNameSlice[i])
 				}
 			} else{
 				skip[i] = true
 			}
 		}
 		if err := writer.Write(titleSlice); err != nil {
-			return &bytes.Buffer{}, "SlcStrtToCSV error: " + err.Error()
+			return &bytes.Buffer{}, errors.New("SlcStrtToCSV error: " + err.Error())
 		}
 		for _, value := range sliceOfInterface {
 			val := reflect.Indirect(reflect.ValueOf(value))
@@ -53,11 +57,11 @@ func GetCSV(sliceOfTruct interface{}) (*bytes.Buffer, string) {
 				}
 			}
 			if err := writer.Write(record); err != nil {
-				return &bytes.Buffer{}, "SlcStrtToCSV error: " + err.Error()
+				return &bytes.Buffer{}, errors.New("SlcStrtToCSV error: " + err.Error())
 			}
 		}
 		writer.Flush()
-		return b, ""
+		return b, nil
 	}
-	return &bytes.Buffer{}, "SlcStrtToCSV error: slice is empty."
+	return &bytes.Buffer{}, errors.New("SlcStrtToCSV error: slice is empty.")
 }
