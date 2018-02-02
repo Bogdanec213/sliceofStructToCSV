@@ -23,7 +23,7 @@ func GetCSV(sliceOfTruct interface{}) (*bytes.Buffer, string) {
 		b := &bytes.Buffer{}
 		writer := csv.NewWriter(b)
 		titleSlice := []string{}
-		val := reflect.Indirect(reflect.ValueOf(data[0]))
+		val := reflect.Indirect(reflect.ValueOf(sliceOfInterface[0]))
 		for i := 0; i < val.NumField(); i++ {
 			if val.Type().Field(i).Tag.Get("title") == "" {
 				titleSlice = append(titleSlice, val.Type().Field(i).Name)
