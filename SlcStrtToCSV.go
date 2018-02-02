@@ -24,6 +24,7 @@ func GetCSV(sliceOfTruct interface{}) (*bytes.Buffer, string) {
 		writer := csv.NewWriter(b)
 		titleSlice := []string{}
 		val := reflect.Indirect(reflect.ValueOf(sliceOfInterface[0]))
+		skip := map[int]bool{}
 		for i := 0; i < val.NumField(); i++ {
 			if val.Type().Field(i).Tag.Get("title") != "-" {
 				if val.Type().Field(i).Tag.Get("title") == "" {
@@ -31,6 +32,8 @@ func GetCSV(sliceOfTruct interface{}) (*bytes.Buffer, string) {
 				} else {
 				titleSlice = append(titleSlice, val.Type().Field(i).Tag.Get("title"))
 				}
+			} else{
+				skip[i] = true
 			}
 		}
 		if err := writer.Write(titleSlice); err != nil {
@@ -40,6 +43,9 @@ func GetCSV(sliceOfTruct interface{}) (*bytes.Buffer, string) {
 			val := reflect.Indirect(reflect.ValueOf(value))
 			record := []string{}
 			for i := 0; i < val.NumField(); i++ {
+				if _, ok := skip[i]; ok {
+					continue
+				}
 				if val.Field(i).Type().String() != "time.Time" {
 					record = append(record, cast.ToString(val.Field(i).Interface()))
 				} else {
